@@ -74,8 +74,19 @@ function App() {
     content = <p>Loading...</p>;
   }
 
-  function addMovieHandler(movie) {
-    console.log(movie);
+  async function addMovieHandler(movie) {
+    const response = await fetch(
+      'https://rcg-star-wars-http-default-rtdb.europe-west1.firebasedatabase.app/movies.json',
+      {
+        method: 'POST',
+        body: JSON.stringify(movie),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const data = await response.json();
+    console.log(data);
   }
 
   return (
