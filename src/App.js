@@ -8,6 +8,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Should use useCallback hook here
+  // Because otherwise, since the dependency is a function in useEffect hook
+  // and since functions are objects
+  // it will change in each execution => infinite loop
+
   const fetchMoviesHandler = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -35,6 +40,21 @@ function App() {
 
     setIsLoading(false);
   }, []);
+
+  // if useEffect would be like:
+  // useEffect(() => {
+  //  fetchMoviesHandler();
+  //});
+  // It would run on every re-evaluation => infinite task
+
+  // So, dependencies argument should be added
+  // useEffect(() => {
+  //  fetchMoviesHandler();
+  //}, []);
+  // But this won't run again, except for the first time the component is loaded
+  // It gives the same result that we want, but
+  // it's not the clean way
+  // List all dependencies you use in useEffect => best practice
 
   useEffect(() => {
     fetchMoviesHandler();
